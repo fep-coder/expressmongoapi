@@ -5,7 +5,7 @@ const Customer = require("../models/customer");
 // GET /customers
 router.get("/", async function (req, res) {
     try {
-        const customers = await Customer.find()
+        const customers = await Customer.find();
 
         res.status(200).json({
             status: "success",
@@ -22,11 +22,49 @@ router.get("/", async function (req, res) {
 // GET /customers/:id
 router.get("/:id", async function (req, res) {
     try {
-        const customer = await Customer.findById(req.params.id)
+        const customer = await Customer.findById(req.params.id);
 
         res.status(200).json({
             status: "success",
             data: { customer },
+        });
+    } catch (error) {
+        res.status(404).json({
+            status: "fail",
+            data: { error },
+        });
+    }
+});
+
+// PATCH /customers/:id
+router.patch("/:id", async function (req, res) {
+    try {
+        const customer = await Customer.findByIdAndUpdate(
+            req.params.id,
+            req.body,
+            { new: true }
+        );
+
+        res.status(200).json({
+            status: "success",
+            data: { customer },
+        });
+    } catch (error) {
+        res.status(404).json({
+            status: "fail",
+            data: { error },
+        });
+    }
+});
+
+// DELETE /customers/:id
+router.delete("/:id", async function (req, res) {
+    try {
+        const customer = await Customer.findByIdAndDelete(req.params.id);
+
+        res.status(204).json({
+            status: "success",
+            data: null,
         });
     } catch (error) {
         res.status(404).json({
