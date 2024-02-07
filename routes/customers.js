@@ -3,8 +3,37 @@ var router = express.Router();
 const Customer = require("../models/customer");
 
 // GET /customers
-router.get("/", function (req, res) {
-    res.send("Customers list");
+router.get("/", async function (req, res) {
+    try {
+        const customers = await Customer.find()
+
+        res.status(200).json({
+            status: "success",
+            data: { customers },
+        });
+    } catch (error) {
+        res.status(400).json({
+            status: "fail",
+            data: { error },
+        });
+    }
+});
+
+// GET /customers/:id
+router.get("/:id", async function (req, res) {
+    try {
+        const customer = await Customer.findById(req.params.id)
+
+        res.status(200).json({
+            status: "success",
+            data: { customer },
+        });
+    } catch (error) {
+        res.status(404).json({
+            status: "fail",
+            data: { error },
+        });
+    }
 });
 
 // POST /customers
